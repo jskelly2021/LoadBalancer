@@ -2,18 +2,32 @@
 CXX := g++
 CXXFLAGS := -std=c++23 -Wall -Wextra -MMD
 
-BIN := loadbalancer
+SRC_DIR := src
+BUILD_DIR := build
+
+BIN := $(BUILD_DIR)/loadbalancer
 SRCS := main.cpp
-OBJS := $(SRCS:.cpp=.o)
+OBJS :=  $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(SRCS))
 
-all: $(BIN)
+-include $(OBJS:.o=.d)
 
+.PHONY: all run clean
+
+all: $(BUILD_DIR) | $(BIN)
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 $(BIN): $(OBJS)
 	$(CXX) $(OBJS) -o $@
 
-%.o: %.cpp
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+
+run: $(BIN)
+	./$(BIN)
+
+
 clean:
-	rm -rf $(BIN) $(OBJS) *.d
+	rm -rf $(BUILD_DIR)
