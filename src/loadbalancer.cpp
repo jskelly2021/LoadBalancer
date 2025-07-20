@@ -33,6 +33,7 @@ void LoadBalancer::run() {
     while (run_time > 0) {
         if (elapsed % SCALE_INTERVAL == 0) {
             scale_servers();
+
             Logger::log("Cycle " + std::to_string(elapsed) +
                 " | Servers: " + std::to_string(servers.size()) +
                 " | Queue: " + std::to_string(request_queue.size()));
@@ -96,6 +97,10 @@ void LoadBalancer::scale_down() {
     int current_count = static_cast<int>(servers.size());
     int max_removable = static_cast<int>(current_count * SCALE_DOWN_RATIO);
     int removed_count = 0;
+
+    if (max_removable == 0) {
+        return;
+    }
 
     Logger::log("Scaling down: Up to " + std::to_string(max_removable) + " servers may be removed");
 
