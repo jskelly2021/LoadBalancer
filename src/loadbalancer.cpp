@@ -29,7 +29,10 @@ LoadBalancer::~LoadBalancer() {
 }
 
 void LoadBalancer::run() {
-
+    while (run_time > 0) {
+        distribute_requests();
+        scale_servers();
+    }
 }
 
 void LoadBalancer::receive_request(Request &req) {
