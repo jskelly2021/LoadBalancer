@@ -1,7 +1,7 @@
 #include "loadbalancer.h"
 
 LoadBalancer::LoadBalancer(int run_time, int num_servers)
-    : request_generator(RequestGenerator(10, 40)),
+    : request_generator(RequestGenerator(MIN_TASK_TIME, MAX_TASK_TIME)),
     run_time(run_time),
     next_server_id(0)
 {
@@ -9,10 +9,7 @@ LoadBalancer::LoadBalancer(int run_time, int num_servers)
         servers.push_back(new Server(next_server_id++));
     }
 
-    int num_requests = num_servers * 100;
-    Logger::log("Initial number of requests: " + std::to_string(num_requests));
-
-    for (int i = 0; i < num_requests; i++) {
+    for (int i = 0; i < num_servers * 100; i++) {
         request_queue.push(request_generator.generate_request());
     }
 }
@@ -24,6 +21,9 @@ LoadBalancer::~LoadBalancer() {
 }
 
 void LoadBalancer::run() {
+    Logger::log("---Beginning Load Balancer---");
+    Logger::log("Initial number of requests: " + std::to_string(request_queue.size()));
+
     int elapsed = 0;
     while (run_time > 0) {
         if (elapsed % SCALE_INTERVAL == 0) {
@@ -42,13 +42,28 @@ void LoadBalancer::run() {
             }
         }
 
+        generate_traffic();
+
         elapsed++;
         run_time--;
     }
+
+    Logger::log("---Ending Load Balancer---");
+    Logger::log("Ending number of requests: " + std::to_string(request_queue.size()));
 }
 
-void LoadBalancer::receive_request(Request &req) {
+void LoadBalancer::generate_traffic() {
+    std::vector<Request> traffic = request_generator.generate_traffic();
 
+    if (traffic.empty()) {
+        return;
+    }
+
+    Logger::log("Load Balancer recieved " + std::to_string(traffic.size()) + " new requests");
+
+    for (Request req : traffic) {
+        request_queue.push(req);
+    }
 }
 
 void LoadBalancer::distribute_requests() {
@@ -72,7 +87,7 @@ void LoadBalancer::scale_servers() {
         scale_up(current_server_count, max_additional_servers);
     }
 
-    else if (servers.size() > MIN_SERVERS) {
+    else if (request_queue.size() < servers.size() * QUEUE_LOAD_FACTOR && servers.size() > MIN_SERVERS) {
         scale_down();
     }
 }

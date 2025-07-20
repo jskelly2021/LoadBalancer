@@ -6,9 +6,11 @@
 #include "logger.h"
 #include "request_generator.h"
 
-#define MAX_SERVERS 50
 #define MIN_SERVERS 1
-#define SCALE_INTERVAL 100
+#define MAX_SERVERS 80
+#define MIN_TASK_TIME 10
+#define MAX_TASK_TIME 50
+#define SCALE_INTERVAL 50
 
 class LoadBalancer {
 private:
@@ -22,7 +24,7 @@ public:
     LoadBalancer(int run_time, int num_servers);
     ~LoadBalancer();
     void run();
-    void receive_request(Request &req);
+    void generate_traffic();
 
 private:
     void distribute_requests();

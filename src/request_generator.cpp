@@ -16,6 +16,17 @@ Request RequestGenerator::generate_request() {
     return req;
 }
 
+std::vector<Request> RequestGenerator::generate_traffic() {
+    std::vector<Request> reqs;
+    if (rand() % TRAFFIC_FREQ == 0) {
+        int num_reqs = rand() % MAX_NUM_NEW_REQS;
+        for (int i = 0; i < num_reqs; i++) {
+            reqs.push_back(generate_request());
+        }
+    }
+    return reqs;
+}
+
 std::string RequestGenerator::ip_gen() {
     return  std::to_string(rand() % 256) + "." +
             std::to_string(rand() % 256) + "." + 
