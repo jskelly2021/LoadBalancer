@@ -14,9 +14,6 @@ OBJS :=  $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRCS))
 
 .PHONY: all run clean $(BUILD_DIR) $(LOG_DIR)
 
-$(info SRCS = $(SRCS))
-$(info OBJS = $(OBJS))
-
 all: $(BUILD_DIR) $(LOG_DIR) $(BIN)
 
 $(BUILD_DIR):

@@ -1,7 +1,8 @@
 #include <printf.h>
 #include <iostream>
-#include "loadbalancer.h"
 #include <string>
+#include "loadbalancer.h"
+#include "logger.h"
 
 int main() {
     int num_servers = 0;
@@ -18,4 +19,6 @@ int main() {
 
     LoadBalancer load_balancer = LoadBalancer(run_time, num_servers);
     load_balancer.run();
+
+    Logger::close();
 }
