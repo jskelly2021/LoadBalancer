@@ -15,8 +15,11 @@ private:
     int req_time;
 
 public:
-    Server(int server_id, Request &req);
+    Server(int id);
     void recieve_request(Request &req);
     void process_request();
     ServerStatus server_status();
+
+private:
+    void complete_request();
 };
