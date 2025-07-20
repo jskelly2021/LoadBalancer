@@ -62,6 +62,10 @@ void LoadBalancer::generate_traffic() {
     Logger::log("Load Balancer recieved " + std::to_string(traffic.size()) + " new requests");
 
     for (Request req : traffic) {
+        if (is_blocked(req.ip_in)) {
+            Logger::log("Request #" + std::to_string(req.id) + " from blocked IP range: " + req.ip_in + " — dropped.");
+            return;
+        }
         request_queue.push(req);
     }
 }
@@ -132,4 +136,17 @@ void LoadBalancer::scale_down() {
     if (removed_count > 0) {
         Logger::log("Scaled down: " + std::to_string(removed_count) + " IDLE servers removed");
     }
+}
+
+void LoadBalancer::add_blocked_addr_range(std::string &addr_range) {
+    blocked_ranges.insert(addr_range);
+}
+
+bool LoadBalancer::is_blocked(std::string &addr_range) {
+    for (const auto& range : blocked_ranges) {
+        if (addr_range.rfind(range, 0) == 0) {
+            return true;
+        }
+    }
+    return false;
 }

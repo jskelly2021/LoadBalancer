@@ -8,8 +8,8 @@
  * @brief Represents the status of a server (either processing a request or idle).
  */
 enum ServerStatus {
-    PROCESSING,
-    IDLE
+    PROCESSING,  /**< Server is actively processing a request. */
+    IDLE         /**< Server is currently idle. */
 };
 
 /**
@@ -54,6 +54,10 @@ public:
      */
     ServerStatus server_status() const;
 
+    /**
+     * @brief Returns the unique identifier of the server.
+     * @return int The server ID.
+     */
     int get_id() const;
 
 private:
