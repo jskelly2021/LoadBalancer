@@ -1,7 +1,8 @@
 #include "loadbalancer.h"
 
 LoadBalancer::LoadBalancer(int run_time, int num_servers)
-    : run_time(run_time),
+    : request_generator(RequestGenerator(10, 40)),
+    run_time(run_time),
     next_server_id(0)
 {
     for (int i = 0; i < num_servers; i++) {
@@ -12,13 +13,7 @@ LoadBalancer::LoadBalancer(int run_time, int num_servers)
     Logger::log("Initial number of requests: " + std::to_string(num_requests));
 
     for (int i = 0; i < num_requests; i++) {
-        Request req;
-        req.id = i;
-        req.ip_in = "192.168.0." + std::to_string(i % 255);
-        req.ip_out = "10.0.0." + std::to_string((i + 5) % 255);
-        req.time = rand() % 10 + 1;
-
-        request_queue.push(req);
+        request_queue.push(request_generator.generate_request());
     }
 }
 

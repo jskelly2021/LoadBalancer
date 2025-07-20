@@ -4,13 +4,15 @@
 #include "request.h"
 #include "server.h"
 #include "logger.h"
+#include "request_generator.h"
 
-#define MAX_SERVERS 40
+#define MAX_SERVERS 50
 #define MIN_SERVERS 1
 #define SCALE_INTERVAL 100
 
 class LoadBalancer {
 private:
+    RequestGenerator request_generator;
     std::queue<Request> request_queue;
     std::vector<Server*> servers;
     int run_time;
