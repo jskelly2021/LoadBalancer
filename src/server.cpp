@@ -27,4 +27,5 @@ void Server::complete_request() {
     status = IDLE;
 }
 
+int Server::get_id() const { return server_id; }
 ServerStatus Server::server_status() const { return status; }

@@ -6,14 +6,15 @@
 #include "logger.h"
 
 #define MAX_SERVERS 40
+#define MIN_SERVERS 1
+#define SCALE_INTERVAL 100
 
 class LoadBalancer {
 private:
     std::queue<Request> request_queue;
     std::vector<Server*> servers;
     int run_time;
-    int num_requests;
-    int num_servers;
+    int next_server_id;
 
 public:
     LoadBalancer(int run_time, int num_servers);
@@ -23,5 +24,7 @@ public:
 
 private:
     void distribute_requests();
-    bool scale_servers();
+    void scale_servers();
+    void scale_up(size_t current_server_count, size_t max_additional_servers);
+    void scale_down();
 };

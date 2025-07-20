@@ -54,6 +54,8 @@ public:
      */
     ServerStatus server_status() const;
 
+    int get_id() const;
+
 private:
     /**
      * @brief Completes the current request.
