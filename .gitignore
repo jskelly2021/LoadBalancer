@@ -5,5 +5,7 @@ build
 *.o
 *.d
 
+log.*
+
 loadbalancer
 *.exe
