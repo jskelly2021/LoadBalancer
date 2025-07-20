@@ -13,5 +13,5 @@ private:
 public:
     static void init(std::string &file_name);
     static void close();
-    static void log(std::string &msg);
+    static void log(const std::string &msg);
 };

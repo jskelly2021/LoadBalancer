@@ -16,7 +16,7 @@ private:
 public:
     LoadBalancer(int run_time, int num_servers);
     void run(int run_time);
-    void recieve_request(Request &req);
+    void receive_request(Request &req);
 
 private:
     void distribute_requests();

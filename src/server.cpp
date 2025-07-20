@@ -6,7 +6,8 @@ Server::Server(int id)
     status(IDLE),
     req_time(0) {}
 
-void Server::recieve_request(Request &req) {
+void Server::receive_request(Request &req) {
+    Logger::log("Server #" + std::to_string(server_id) + " received request #" + std::to_string(req.id));
     this->req = req;
     status = PROCESSING;
     req_time = req.time;
@@ -20,6 +21,7 @@ void Server::process_request() {
 }
 
 void Server::complete_request() {
+    Logger::log("Server #" + std::to_string(server_id) + " completed request #" + std::to_string(req.id));
     status = IDLE;
     req_time = 0;
     req = {};

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "request.h"
+#include "logger.h"
 
 enum ServerStatus {
     PROCESSING,
@@ -16,7 +17,7 @@ private:
 
 public:
     Server(int id);
-    void recieve_request(Request &req);
+    void receive_request(Request &req);
     void process_request();
     ServerStatus server_status();
 

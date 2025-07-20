@@ -14,7 +14,7 @@ void Logger::close() {
     }
 }
 
-void Logger::log(std::string &msg) {
+void Logger::log(const std::string &msg) {
     std::unique_lock<std::mutex> lock(mtx);
 
     if (!out_stream.is_open()) {
