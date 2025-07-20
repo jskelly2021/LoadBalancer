@@ -9,8 +9,8 @@ Server::Server(int id)
 void Server::receive_request(Request &req) {
     Logger::log("Server #" + std::to_string(server_id) + " received request #" + std::to_string(req.id));
     this->req = req;
-    status = PROCESSING;
     req_time = req.time;
+    status = PROCESSING;
 }
 
 void Server::process_request() {
@@ -22,9 +22,9 @@ void Server::process_request() {
 
 void Server::complete_request() {
     Logger::log("Server #" + std::to_string(server_id) + " completed request #" + std::to_string(req.id));
-    status = IDLE;
-    req_time = 0;
     req = {};
+    req_time = 0;
+    status = IDLE;
 }
 
-ServerStatus Server::server_status() { return status; }
+ServerStatus Server::server_status() const { return status; }
