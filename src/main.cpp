@@ -1,5 +1,7 @@
 #include <printf.h>
 #include <iostream>
+#include "loadbalancer.h"
+
 
 int main() {
     int num_servers = 0;
