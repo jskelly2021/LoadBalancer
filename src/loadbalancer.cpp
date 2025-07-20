@@ -2,8 +2,8 @@
 
 LoadBalancer::LoadBalancer(int run_time, int num_servers)
     : run_time(run_time),
-    num_servers(num_servers),
-    num_requests(num_servers * 100)
+    num_requests(num_servers * 100),
+    num_servers(num_servers)
 {
     for (int i = 0; i < num_servers; i++) {
         servers.push_back(new Server(i));
@@ -19,7 +19,7 @@ LoadBalancer::LoadBalancer(int run_time, int num_servers)
         request_queue.push(req);
     }
 
-    Logger::log("Starting number of requests: " + std::to_string(num_requests));
+    Logger::log("Initial number of requests: " + std::to_string(num_requests));
 }
 
 LoadBalancer::~LoadBalancer() {
@@ -31,7 +31,14 @@ LoadBalancer::~LoadBalancer() {
 void LoadBalancer::run() {
     while (run_time > 0) {
         distribute_requests();
+        for (Server* server : servers) {
+            if (server->server_status() == ServerStatus::PROCESSING) {
+                server->process_request();
+            }
+        }
+
         scale_servers();
+        run_time -= 1;
     }
 }
 
@@ -47,6 +54,7 @@ void LoadBalancer::distribute_requests() {
         if (server->server_status() == ServerStatus::IDLE) {
             server->receive_request(request_queue.front());
             request_queue.pop();
+            num_requests -= 1;
         }
     }
 }

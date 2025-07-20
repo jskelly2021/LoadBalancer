@@ -1,5 +1,8 @@
 #include "logger.h"
 
+std::ofstream Logger::out_stream;
+std::mutex Logger::mtx;
+
 void Logger::init(std::string &file_name) {
     out_stream.open(file_name, std::ios::trunc);
     if (!out_stream.is_open()) {

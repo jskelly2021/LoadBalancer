@@ -7,7 +7,7 @@ BUILD_DIR := build
 
 BIN := $(BUILD_DIR)/loadbalancer
 SRCS := $(wildcard $(SRC_DIR)/*.cpp)
-OBJS :=  $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(SRCS))
+OBJS :=  $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRCS))
 
 -include $(OBJS:.o=.d)
 
