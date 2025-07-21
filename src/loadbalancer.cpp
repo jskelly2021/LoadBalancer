@@ -21,8 +21,13 @@ LoadBalancer::~LoadBalancer() {
 }
 
 void LoadBalancer::run() {
-    Logger::log("---Beginning Load Balancer---");
+    Logger::log("Blocked address ranges:");
+    for (const auto& addr : blocked_ranges) {
+        Logger::log(" - " + addr);
+    }
+    Logger::log("Task times range (cycles): " + std::to_string(MIN_TASK_TIME) + " -- " + std::to_string(MAX_TASK_TIME));
     Logger::log("Initial number of requests: " + std::to_string(request_queue.size()));
+    Logger::log("---Beginning Load Balancer---");
 
     int elapsed = 0;
     while (run_time > 0) {
@@ -49,7 +54,13 @@ void LoadBalancer::run() {
     }
 
     Logger::log("---Ending Load Balancer---");
-    Logger::log("Ending number of requests: " + std::to_string(request_queue.size()));
+    Logger::log("Remaining requests: " + std::to_string(request_queue.size()));
+    Logger::log("Active Servers: " + std::to_string(servers.size()));
+    Logger::log("Total dropped requests: " + std::to_string(dropped_reqs.size()));
+    Logger::log("Dropped Requests:");
+    for (const auto& req : dropped_reqs) {
+        Logger::log(" - Origin: " + req.ip_in);
+    }
 }
 
 void LoadBalancer::generate_traffic() {
@@ -64,6 +75,7 @@ void LoadBalancer::generate_traffic() {
     for (Request req : traffic) {
         if (is_blocked(req.ip_in)) {
             Logger::log("Request #" + std::to_string(req.id) + " from blocked IP range: " + req.ip_in + " — dropped.");
+            dropped_reqs.push_back(req);
             return;
         }
         request_queue.push(req);

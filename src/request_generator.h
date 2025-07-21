@@ -4,8 +4,10 @@
 #include <vector>
 #include "request.h"
 
-#define TRAFFIC_FREQ 4        /**< Frequency modifier that determines how often traffic is generated. */
-#define MAX_NUM_NEW_REQS 20   /**< Maximum number of new requests generated in one traffic event. */
+#define TRAFFIC_FREQ 5        /**< Frequency modifier that determines how often traffic is generated. */
+#define MAX_NUM_NEW_REQS 5   /**< Maximum number of new requests generated in one traffic event. */
+#define SPIKE_FREQ 6000
+#define SPIKE_NUM_REQS 1500
 
 /**
  * @class RequestGenerator

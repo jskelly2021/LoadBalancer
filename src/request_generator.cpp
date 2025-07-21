@@ -18,7 +18,13 @@ Request RequestGenerator::generate_request() {
 
 std::vector<Request> RequestGenerator::generate_traffic() {
     std::vector<Request> reqs;
-    if (rand() % TRAFFIC_FREQ == 0) {
+    if (rand() % SPIKE_FREQ == 0) {
+        for (int i = 0; i < SPIKE_NUM_REQS; i++) {
+            reqs.push_back(generate_request());
+        }
+    }
+
+    else if (rand() % TRAFFIC_FREQ == 0) {
         int num_reqs = rand() % MAX_NUM_NEW_REQS;
         for (int i = 0; i < num_reqs; i++) {
             reqs.push_back(generate_request());

@@ -10,9 +10,9 @@
 #include "request_generator.h"
 
 #define MIN_SERVERS 1              /**< Minimum number of servers allowed in the system. */
-#define MAX_SERVERS 80             /**< Maximum number of servers allowed in the system. */
+#define MAX_SERVERS 40             /**< Maximum number of servers allowed in the system. */
 #define MIN_TASK_TIME 10           /**< Minimum processing time for requests. */
-#define MAX_TASK_TIME 50           /**< Maximum processing time for requests. */
+#define MAX_TASK_TIME 40           /**< Maximum processing time for requests. */
 #define SCALE_INTERVAL 50          /**< Interval (in cycles) at which server scaling is evaluated. */
 
 /**
@@ -29,6 +29,7 @@ private:
     std::unordered_set<std::string> blocked_ranges;  /**< Set of IP address prefixes to block. */
     std::queue<Request> request_queue;               /**< Queue of pending requests waiting for processing. */
     std::vector<Server*> servers;                    /**< Pool of server pointers used to handle requests. */
+    std::vector<Request> dropped_reqs;               /**< Stores requests that were dropped due to being blocked. */
     int run_time;                                    /**< Total number of cycles to simulate. */
     int next_server_id;                              /**< ID to assign to the next newly created server. */
 
